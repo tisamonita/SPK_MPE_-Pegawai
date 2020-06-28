@@ -71,7 +71,6 @@ if ($_POST['ubah']){
 	$jabatan = $_POST['jabatan'];
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$password = $_POST['password'];
 
 	if(empty($_POST['password'])){
 		$query6 = "UPDATE user set username='$username' WHERE id_user='$id_user'";
@@ -238,13 +237,13 @@ $ketuapenilai = mysqli_num_rows($query9);
 																			</div>
 																		</div>
 
-																		<label for="password">Username</label>
+																		<label for="username">Username</label>
 																		<div class="form-group">
 																			<div class="form-line">
 																				<input type="text" name="username" class="form-control" value="<?= $hasil5['username']; ?>">
 																			</div>
 																		</div>
-																		<label for="password">Email</label>
+																		<label for="email">Email</label>
 																		<div class="form-group">
 																			<div class="form-line">
 																				<input type="email" name="email" class="form-control" value="<?= $hasil5['email']; ?>">
@@ -317,7 +316,7 @@ $ketuapenilai = mysqli_num_rows($query9);
 																			</div>
 																		</div>
 
-																		<label for="password">Username</label>
+																		<label for="username">Username</label>
 																		<div class="form-group">
 																			<div class="form-line disabled">
 																				<input type="text" name="username" class="form-control" disabled value="<?= $hasil5['username']; ?>">
@@ -482,7 +481,7 @@ $ketuapenilai = mysqli_num_rows($query9);
 										</div>
 
 
-										<label for="password">Jabatan</label>
+										<label for="jabatan">Jabatan</label>
 										<div class="form-group">
 											<div class="form-line">
 												<select name="jabatan" >
@@ -499,13 +498,13 @@ $ketuapenilai = mysqli_num_rows($query9);
 												</select>
 											</div>
 										</div>
-										<label for="password">Username</label>
+										<label for="username">Username</label>
 										<div class="form-group">
 											<div class="form-line">
 												<input type="text" name="username" class="form-control" placeholder="Masukkan Username">
 											</div>
 										</div>
-											<label for="password">Email</label>
+											<label for="email">Email</label>
 										<div class="form-group">
 											<div class="form-line">
 												<input type="email" name="email" class="form-control" placeholder="Masukkan Email">
@@ -550,7 +549,7 @@ $ketuapenilai = mysqli_num_rows($query9);
 							<div class="card">
 								<div class="body">
 									<form method="POST" >
-										<label for="password">Pilih Penilai Sebagai Ketua Tim Penilai</label>
+										<label for="">Pilih Penilai Sebagai Ketua Tim Penilai</label>
 										<div class="form-group">
 											<div class="form-line">
 											<?php

@@ -2,7 +2,11 @@
 
 $id_pegawai = $_GET['kd'];
 
-$query1 ="SELECT kriteria.kode_kriteria2, kriteria.nama2, subkriteria.Nama, subkriteria.kode_kriteria from subkriteria INNER JOIN kriteria ON subkriteria.kode_induk=kriteria.kode_kriteria2";
+$history = $link-> query("SELECT * FROM history where status='belum' OR status='konfirm'");
+$history = mysqli_fetch_array($history);
+$id_history = $history['id_history'];
+
+$query1 ="SELECT kriteria.kode_kriteria2, kriteria.nama2, subkriteria.Nama, subkriteria.id_kriteria, subkriteria.kode_kriteria from subkriteria INNER JOIN kriteria ON subkriteria.kode_induk=kriteria.kode_kriteria2";
 $hasil1 = mysqli_query($link, $query1);
 $jumlahkriteria = mysqli_num_rows($hasil1);
 
@@ -13,30 +17,31 @@ $hasil2 = mysqli_query($link, $query2);
 $pegawai = mysqli_fetch_array($hasil2);
 $id_pegawai = $pegawai['id_pegawai'];
 
-$query4 = "SELECT id_nilai from nilai_pegawai WHERE id_pegawai='$id_pegawai' AND id_penilai='$id_penilai'";
+$query4 = "SELECT * from nilai_pegawai WHERE id_pegawai='$id_pegawai' AND id_penilai='$id_penilai' AND id_history='$id_history'";
 $hasil4 = mysqli_query($link, $query4);
 $hasil4 = mysqli_fetch_array($hasil4);
 
 if(isset($hasil4)){
-	echo '<script>window.location="?module=isian&kd='.$hasil4['id_nilai'].'"</script>';
+	echo '<script>window.location="?module=isian&kd='.$hasil4['id_pegawai'].'"</script>';
 }
 
 if ($_POST['nilai']){
 	$id = 0;
 	$K = 0;
 
-$query3 = "INSERT INTO `nilai_pegawai`(`id_nilai`, `id_pegawai`, `id_penilai`) VALUES ('','$id_pegawai','$id_penilai')";
-$hasil3 = mysqli_query($link, $query3);
-while($krit = mysqli_fetch_array($hasil1)){
-	$C = $krit['kode_kriteria'];
-	$KR= $_POST[$C];
-	$query6 = "UPDATE `nilai_pegawai` SET ".$C."= ".$KR." WHERE id_pegawai=".$id_pegawai." AND id_penilai=".$id_penilai;
-	echo $query6;
-	$hasil6 = mysqli_query($link, $query6);
-}
+	//perulangan untuk input nilai ke db
+	$hs1 = $link->query("SELECT * FROM subkriteria");
+	while($hs2 = mysqli_fetch_array($hs1)){
+		$id = $hs2['id_kriteria'];
+		$value = $_POST[$id];
+
+		$query_insert = $link -> query("INSERT INTO nilai_pegawai values('','$id_pegawai', '$id_penilai','$id_history','$id','$value')");
+		
+	}
+
 	
 
-	if($hasil3){
+	if($query_insert){
 		$_SESSION['pesan'] = 'berhasil';
 		$query5 = "SELECT id_nilai from nilai_pegawai WHERE id_pegawai='$id_pegawai'";
 		$hasil5 = mysqli_query($link, $query5);
@@ -48,6 +53,7 @@ while($krit = mysqli_fetch_array($hasil1)){
 
 
 ?>
+
 
 <!-- Select -->
 <div class="row clearfix">
@@ -106,12 +112,14 @@ while($krit = mysqli_fetch_array($hasil1)){
 						</div>
 					</div>
 				</div>
-				<form method="POST">
+
+		<form method="POST">
 				<?php
 				$id = 0;
 				$K = 0;
 				$echo1 = 0;
 				while( $kriteria = mysqli_fetch_array($hasil1)){
+					$name = $kriteria['id_kriteria'];
 					$K = $K + 1;
 					 
 
@@ -140,19 +148,19 @@ while($krit = mysqli_fetch_array($hasil1)){
 				</h2>
 				<div class="demo-radio-button">
 					<?php $id = $id+1; ?>
-					<input name="C<?=$K; ?>" value="1" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
+					<input name="<?=$name; ?>" value="1" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
 					<label for="radio_<?=$id; ?>">Kurang Sekali</label>
 					<?php $id = $id+1; ?>
-					<input name="C<?=$K; ?>" value="2" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
+					<input name="<?=$name; ?>" value="2" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
 					<label for="radio_<?=$id; ?>">Kurang</label>
 					<?php $id = $id+1; ?>
-					<input name="C<?=$K; ?>" value="3" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
+					<input name="<?=$name; ?>" value="3" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
 					<label for="radio_<?=$id; ?>">Cukup</label>
 					<?php $id = $id+1; ?>
-					<input name="C<?=$K; ?>" value="4" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
+					<input name="<?=$name; ?>" value="4" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
 					<label for="radio_<?=$id; ?>">Baik</label>
 					<?php $id = $id+1; ?>
-					<input name="C<?=$K; ?>" value="5" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
+					<input name="<?=$name; ?>" value="5" type="radio" class="with-gap" id="radio_<?=$id; ?>" />
 					<label for="radio_<?=$id; ?>">Baik Sekali</label>
 				</div>
 				<?php } ?>
@@ -165,6 +173,7 @@ while($krit = mysqli_fetch_array($hasil1)){
 		</div>
 	</div>
 </div>
+
 <!-- #END# Select -->
 
 <div class="modal fade" id="detailPEGAWAI<?php echo $pegawai['id_pegawai']; ?>" tabindex="-1" role="dialog">

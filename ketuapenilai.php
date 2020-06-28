@@ -25,6 +25,10 @@ $id_penilai = $hasil01['id_penilai'];
 $pegawai = $link -> query("SELECT * FROM pegawai");
 $jumlahp  = mysqli_num_rows($pegawai);
 
+$history = $link-> query("SELECT * FROM history where status='belum' OR status='konfirm'");
+$history = mysqli_fetch_array($history);
+$id_history = $history['id_history'];
+
 ?>
 
 

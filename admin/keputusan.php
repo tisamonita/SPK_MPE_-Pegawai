@@ -42,7 +42,7 @@ while($dtcek = mysqli_fetch_Array($cekkep)){
 }
 
 
-$query2 = "SELECT * FROM hasil ORDER by hasil desc";
+$query2 = "SELECT * FROM hasil WHERE id_history='$id_history' ORDER by hasil desc";
 $hasil2 = mysqli_query($link,$query2);
 $jumlah = mysqli_num_rows($hasil2);
 $warning = $jumlah - 1;
@@ -54,7 +54,7 @@ if($_POST['submit']){
 	$keputusan = $_POST['keputusan'];
 	$id_pegawai = $_POST['id_pegawai'];
 	
-		$query11 = "UPDATE hasil set keputusan='$keputusan' WHERE id_pegawai='$id_pegawai'";
+		$query11 = "UPDATE hasil set keputusan='$keputusan' WHERE id_pegawai='$id_pegawai' AND id_history='$id_history'";
 		$hasil11 = mysqli_query($link, $query11);
 	if ($hasil11) {
 			$_SESSION['pesan'] = 'berhasil';

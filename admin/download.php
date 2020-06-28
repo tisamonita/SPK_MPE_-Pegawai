@@ -2,6 +2,10 @@
 require('../fpdf/fpdf.php');
 include ("../koneksi.php");
 
+$history = $link -> query("SELECT * FROM history where status='belum' OR status='konfirm'");
+$datahistory = mysqli_fetch_Array($history);
+$id_history = $datahistory['id_history'];
+
 class PDF extends FPDF
 {
 // Page header
@@ -144,7 +148,7 @@ $tahun=$array1[2];
 
 $bulanconvert = conv($bulan);
 
-$query2 = "SELECT * FROM hasil ORDER by hasil desc";
+$query2 = "SELECT * FROM hasil WHERE id_history='$id_history' ORDER by hasil desc";
 $hasil2 = mysqli_query($link,$query2);
 $jumlah = mysqli_num_rows($hasil2);
 $warning = $jumlah - 1;
@@ -181,6 +185,18 @@ $pdf->Cell(28,6,'Keputusan',1,1);
 $nb=$pdf->WordWrap($text2,190);
 $pkt = 0; 
 while ($row = mysqli_fetch_array($hasil2)){
+
+    if ($row['keputusan']=='peringatan') {
+        $keputusan = "Diberikan Surat Peringatan";
+    } 
+
+    if ($row['keputusan']=='berhentikan') {
+        $keputusan = "Kontrak kerja tidak dilanjutkan";
+    } 
+    if ($row['keputusan']=='lanjut') {
+        $keputusan = "Kontrak kerja dilanjutkan";
+    } 
+
     $pkt = $pkt + 1;
     $id_pegawai =$row['id_pegawai'];
     $query3 = $link->query("SELECT * FROM pegawai where id_pegawai='$id_pegawai'");
@@ -191,7 +207,7 @@ while ($row = mysqli_fetch_array($hasil2)){
     $pdf->Cell(27,6,$dtpegawai['tgl_skpertama'],1,0);
     $pdf->Cell(27,6,$dtpegawai['bagian'],1,0);
     $pdf->Cell(17,6, $row['hasil'],1,0); 
-    $pdf->Cell(28,6, $row['keputusan'],1,1); 
+    $pdf->Cell(28,6, $keputusan,1,1); 
  
 }
 

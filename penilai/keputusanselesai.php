@@ -72,7 +72,18 @@ $jumlah = mysqli_num_rows($hasil2);
 									<td><?= $dtpegawai['nama']; ?></td>
 									<td><?= $dtpegawai['tgl_skpertama']; ?></td>
 									<td><?= $datax['hasil']; ?></td>
-									<td> <?= $datax['keputusan']; ?> </td>
+									<td> <?php
+									
+									if($datax['keputusan']=='lanjut'){
+										echo 'Kontrak kerja dilanjutkan';
+									}
+									if($datax['keputusan']=='peringatan'){
+										echo 'Diberikan Surat Peringatan';
+									}
+									if($datax['keputusan']=='berhentikan'){
+										echo 'Kontrak kerja tidak dilanjutkan';
+									}
+									 ?> </td>
 									</tr>
 									<?php } ?>
 								</tbody>

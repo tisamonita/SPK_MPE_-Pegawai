@@ -17,24 +17,9 @@ if($_SESSION['pesan']){ ?>
 	<?php 
 	unset($_SESSION['pesan']);
 }
-$id_nilai = $_GET['kd'];
-$query2 ="SELECT * FROM subkriteria";
-$hasil2 = mysqli_query($link, $query2);
-
-	$concate1 = "SELECT pegawai.foto, pegawai.id_pegawai, pegawai.tgl_skpertama, pegawai.nama";
-	$concate2 = "";
-	while($KRITERIA = mysqli_fetch_array($hasil2)){
-		$concate2 = $concate2.", nilai_pegawai.".$KRITERIA['kode_kriteria'];
-	}
-	$concate3 = " from nilai_pegawai inner join pegawai on pegawai.id_pegawai=nilai_pegawai.id_pegawai where id_nilai=".$id_nilai;
-	$concate = $concate1.$concate2.$concate3;
-	
-$hasil1 = mysqli_query($link, $concate);
-$data1 = mysqli_Fetch_Array($hasil1);
-
-$query2 ="SELECT * FROM subkriteria";
-$hasil2 = mysqli_query($link, $query2);
-
+$id_pegawai = $_GET['kd'];
+$data1 = $link->query("SELECT * FROM pegawai WHERE id_pegawai='$id_pegawai'");
+$data1 = mysqli_fetch_array($data1);
 
 ?>
 
@@ -117,24 +102,28 @@ $hasil2 = mysqli_query($link, $query2);
 							<?php
 							$id = 0;
 							$K = 0;
+							$hasil2= $link->query("SELECT * FROM subkriteria");
 							while( $kriteria = mysqli_fetch_array($hasil2)){
-								$K = $K + 1;
-								$C = 'C'.$K;
-								$C = $data1[$C];
-								$query3 =  "SELECT * FROM bobot where id_sub='$C'";
-								$query3 = mysqli_query($link, $query3);
-								$query3 = mysqli_fetch_array($query3);
-								$query3 = $query3['nama_sub'];
-
-
+								$K = $K+1;
+								
 								?>
 
 								<tr>
 									<th scope="row"><?= $K; ?></th>
 									<td><?= $kriteria['Nama']; ?></td>
 									<td>
-										<?= $query3; ?> </td>
-										<td>  <?= $C; ?></td>
+										<?php
+											$id_kriteria = $kriteria['id_kriteria'];
+											$nilai = $link->query("SELECT nilai from nilai_pegawai WHERE id_pegawai='$id_pegawai' AND id_penilai='$id_penilai' AND id_history='$id_history' AND id_subk='$id_kriteria'");
+											$datanilai = mysqli_fetch_array($nilai);
+											$idnilai = $datanilai['nilai'];
+											$alph = $link-> query("SELECT * FROM bobot WHERE nilai='$idnilai'");
+											$alph2 = mysqli_fetch_array($alph);
+											echo $alph2['nama_sub'];
+
+										?>
+									</td>
+										<td> <?= $datanilai['nilai'];?></td>
 									</tr>
 
 									<?php } ?>
@@ -201,7 +190,7 @@ $hasil2 = mysqli_query($link, $query2);
 									<label for="email_address">Jenis Kelamin</label>
 									<div class="form-group">
 										<div class="form-line disabled">
-											<input type="text" name="nama" class="form-control" disabled value="<?= $hasil5['jenis_kelamin']; ?>">
+											<input type="text" name="nama" class="form-control" disabled value="<?= $hasil5['jeniskelamin']; ?>">
 										</div>
 									</div>					
 									<label for="email_address">Alamat</label>

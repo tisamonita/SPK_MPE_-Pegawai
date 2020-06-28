@@ -5,7 +5,7 @@ if ($_SESSION['role_2']!='ketuapenilai'){
 	header('location: index.php');  
 } 
 
-$query2 = "SELECT * FROM hasil ORDER by hasil desc";
+$query2 = "SELECT * FROM hasil WHERE id_history='$id_history' ORDER by hasil desc";
 $hasil2 = mysqli_query($link,$query2);
 $jumlah = mysqli_num_rows($hasil2);
 $warning = $jumlah - 1;

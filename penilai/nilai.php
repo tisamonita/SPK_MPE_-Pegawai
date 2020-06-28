@@ -18,7 +18,7 @@ if($_SESSION['pesan']){ ?>
 	unset($_SESSION['pesan']);
 }
 
-$query1 = "SELECT * from pegawai ORDER BY nama ASC";
+$query1 = "SELECT * from pegawai WHERE status='aktif' ORDER BY nama ASC";
 $hasil1 = mysqli_query($link, $query1);
 
 
@@ -59,7 +59,7 @@ $hasil1 = mysqli_query($link, $query1);
 						<tbody>
 							<?php while($data= mysqli_Fetch_Array($hasil1)){
 								$id_pegawai = $data['id_pegawai'];
-								$querynilai = "SELECT * FROM nilai_pegawai where id_pegawai='$id_pegawai' and id_penilai='$id_penilai' ";
+								$querynilai = "SELECT * FROM nilai_pegawai where id_pegawai='$id_pegawai' and id_penilai='$id_penilai' AND id_history='$id_history' ";
 								$hasilnilai = mysqli_query($link, $querynilai);
 								$hasilnilai = mysqli_Fetch_Array($hasilnilai);
 

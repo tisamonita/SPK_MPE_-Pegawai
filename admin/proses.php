@@ -4,7 +4,6 @@ if($_SESSION['pesan']){ ?>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <?php if($_SESSION['pesan'] =='berhasil') {
             echo "FILE BERHASIL DIUPLOAD";
-
         } 
         if($_SESSION['pesan'] =='ubah'){
             echo "Data Admin Berhasil Diubah";
@@ -50,31 +49,19 @@ if($_POST['proses']) {
 	$query2 = "UPDATE history set status='selesai' where status='konfirm'";
     $hasil2 = mysqli_query($link, $query2);
 
-    $query3 = "SELECT id_pegawai FROM hasil where keputusan='berhentikan'";
+    $query3 = "SELECT id_pegawai FROM hasil where keputusan='berhentikan' AND id_history='$id_history'";
     $query3 = mysqli_query($link, $query3);
     while($data = mysqli_fetch_array($query3)){
     	$id_pegawai = $data['id_pegawai'];
-    	$query4 = "DELETE from pegawai WHERE id_pegawai='$id_pegawai'";
+    	$query4 = "UPDATE pegawai set status='berhenti' WHERE id_pegawai='$id_pegawai'";
     	$query4 = mysqli_query($link, $query4);
     	     
     }
 
-    $query3 = "SELECT id_pegawai FROM nilai_pegawai";
-    $query3 = mysqli_query($link, $query3);
-    while($data = mysqli_fetch_array($query3)){
-    	$id_pegawai = $data['id_pegawai'];
-    	$query4 = "DELETE from nilai_pegawai WHERE id_pegawai='$id_pegawai'";
-    	$query4 = mysqli_query($link, $query4);
-    	     
-    }
-
-    	$query5 = "TRUNCATE TABLE hasil";
-       $query5 = mysqli_query($link, $query5);
-
-       $query6 = "INSERT INTO history values('', '', '', 'belum')";
+	$query6 = "INSERT INTO history values('', '', '', 'belum')";
        $query6 = mysqli_query($link, $query6);
 
-    if ($query5) {
+    if ($query6) {
             $_SESSION['pesan'] = 'berhasil';
             echo '<script>window.location="?module=history"</script>';
     }

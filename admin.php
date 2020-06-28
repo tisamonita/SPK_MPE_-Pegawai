@@ -18,6 +18,10 @@ $data1 = mysqli_fetch_array($link1);
 
 $pegawai = $link -> query("SELECT * FROM pegawai");
 $jumlahp  = mysqli_num_rows($pegawai);
+
+$history = $link -> query("SELECT * FROM history where status='belum' OR status='konfirm'");
+$datahistory = mysqli_fetch_Array($history);
+$id_history = $datahistory['id_history'];
 ?>
 
 <!DOCTYPE html>

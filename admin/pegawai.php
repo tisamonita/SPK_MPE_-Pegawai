@@ -22,7 +22,7 @@ if($_SESSION['pesan']){ ?>
 	unset($_SESSION['pesan']);
 }
 
-$query1 = "SELECT * from pegawai ORDER BY nama ASC";
+$query1 = "SELECT * from pegawai WHERE status='aktif' ORDER BY nama ASC";
 $hasil1 = mysqli_query($link, $query1);
 
 if ($_POST['submit']){
@@ -44,7 +44,7 @@ if ($_POST['submit']){
 		$lokasi = 'images/pegawai/'.$nama.$foto_name;
 		move_uploaded_file($foto_tmp, $lokasi);
 
-		$query2 = "INSERT into pegawai values('', '$nama', '$bagian', '$pendidikan', '$jeniskelamin', '$tanggal', '$lokasi', '$alamat', '$tanggallahir')";
+		$query2 = "INSERT into pegawai values('', '$nama', '$bagian', 'aktif', '$pendidikan', '$jeniskelamin', '$tanggal', '$lokasi', '$alamat', '$tanggallahir')";
 		$hasil2 = mysqli_query($link, $query2);
 
 		if ($hasil2) {
